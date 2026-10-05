@@ -25,12 +25,12 @@ input,button,select{font-size:19px!important}
 .leaderCard{background:white;border-radius:14px;margin:8px 12px;padding:12px;display:flex;gap:12px;align-items:center;border:1px solid #e2e8f0}.leaderImg{width:60px;height:60px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}.leaderImg img{width:100%;height:100%;object-fit:cover}
 </style></head><body>
 <div class="header"><div class="hL">⛪</div><div class="hR" id="kawnClick"><b>KAWNMAWI<br>PRESBYTERIAN<br>KOHHRAN</b><small>Estd:1984</small></div></div>
- <div id="githubSyncBar" class="adminOnly" style="background:#ffeb3b;padding:10px;text-align:center;border-bottom:3px solid #0f172a;display:none">
+<div id="githubSyncBar" style="background:#ffeb3b;padding:12px;text-align:center;border-bottom:3px solid #0f172a">
 <b>🚀 GITHUB LIVE SYNC</b><br>
-<span id="tokenStatus" style="font-size:12px">❌ Token awm lo</span><br>
-<button onclick="changeGitHubToken()" style="background:#0f172a;color:white;padding:8px 14px;border-radius:8px;margin:4px">🔑 Token Thlak</button>
-<button onclick="uploadToGitHubManual()" id="githubUploadBtn" style="background:#16a34a;color:white;padding:8px 14px;border-radius:8px;margin:4px;display:none">🚀 GITHUB ah LIVE UPLOAD</button>
-<div id="githubUploadStatus" style="font-size:11px"></div>
+<span id="tokenStatus" style="font-size:13px">❌ Token awm lo</span><br>
+<button onclick="changeGitHubToken()" style="background:#0f172a;color:white;padding:10px 16px;border-radius:8px;margin:5px">🔑 Token Thlak</button>
+<button onclick="uploadToGitHubManual()" id="githubUploadBtn" style="background:#16a34a;color:white;padding:10px 16px;border-radius:8px;margin:5px;display:none">🚀 GITHUB ah UPLOAD</button>
+<div id="githubUploadStatus" style="font-size:12px"></div>
 </div>
 <div class="grid">
 <div class="card" onclick="openP('chanchin')"><div class="icon">📰</div><b>Kohhran<br>Chanchin</b></div>
@@ -274,12 +274,7 @@ onSnapshot(doc(db,"kohhran","drivePhotos"), (snap)=>{ if(snap.exists() && snap.d
 onSnapshot(doc(db,"kohhran","docs"), (snap)=>{ if(snap.exists() && snap.data().data){ try{ const arr=JSON.parse(snap.data().data); localStorage.setItem('kawn_docs', JSON.stringify(arr)); if(typeof docs !== 'undefined'){ docs=arr; } if(typeof renderDocs === 'function') renderDocs(); }catch(e){} } });
 onSnapshot(doc(db,"kohhran","videos"), (snap)=>{ if(snap.exists() && snap.data().data){ try{ const arr=JSON.parse(snap.data().data); localStorage.setItem('kawn_videos', JSON.stringify(arr)); if(typeof videos !== 'undefined'){ videos=arr; } if(typeof renderVideo === 'function') renderVideo(); }catch(e){} } });
 </script<script>
-const GITHUB_CONFIG={username:"mahmuaka26",repo:"mahmuaka26.github.io",path:"Press/index.html",branch:"main"};
-function checkGitHubToken(){const t=localStorage.getItem('kawn_github_token');const s=document.getElementById('tokenStatus');const b=document.getElementById('githubUploadBtn');if(s)s.innerText=t?"✅ Token awm":"❌ Token awm lo";if(t&&b&&isAdmin)b.style.display='inline-block';}
-function changeGitHubToken(){const cur=localStorage.getItem('kawn_github_token')||'';const nt=prompt("Token (ghp_...) paste rawh:",cur);if(nt){localStorage.setItem('kawn_github_token',nt.trim());checkGitHubToken();alert("Token save fel!");}}
-async function uploadToGitHubManual(){const token=localStorage.getItem('kawn_github_token');if(!token){alert("Token awm lo!");return;}const btn=document.getElementById('githubUploadBtn');if(btn){btn.innerText="⏳ Uploading...";btn.disabled=true;}try{const getUrl=`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;const getRes=await fetch(getUrl,{headers:{Authorization:`token ${token}`}});const sha=(await getRes.json()).sha;let html=document.documentElement.outerHTML;const inj='<script id="kawn_injected_data">try{localStorage.setItem(\'kawn_chanchin\','+JSON.stringify(localStorage.getItem('kawn_chanchin')||'')+');localStorage.setItem(\'kawn_puipa8_full\','+JSON.stringify(localStorage.getItem('kawn_puipa8_full')||'[]')+');localStorage.setItem(\'kawn_bials_v2\','+JSON.stringify(localStorage.getItem('kawn_bials_v2')||'[]')+');localStorage.setItem(\'kawn_kohhrans_v2\','+JSON.stringify(localStorage.getItem('kawn_kohhrans_v2')||'[]')+');localStorage.setItem(\'kawn_palais_v2\','+JSON.stringify(localStorage.getItem('kawn_palais_v2')||'[]')+');localStorage.setItem(\'kawn_thlenHosts\','+JSON.stringify(localStorage.getItem('kawn_thlenHosts')||'[]')+');}catch(e){}</scr'+'ipt>';html=html.replace(/<script id="kawn_injected_data">[\\s\\S]*?<\\/script>/g,'');html=html.includes('</head>')?html.replace('</head>',inj+'</head>'):html.replace('<body>','<body>'+inj);const enc=btoa(unescape(encodeURIComponent(html)));const putRes=await fetch(getUrl,{method:"PUT",headers:{Authorization:`token ${token}`,"Content-Type":"application/json"},body:JSON.stringify({message:"Update - "+new Date().toLocaleString(),content:enc,sha:sha,branch:GITHUB_CONFIG.branch})});if(putRes.ok){alert("✅ SUCCESS! Minute 2-3 hnu ah midang pawn an hmu ang!");}else{alert("Fail");}}catch(e){alert("Error: "+e.message);}if(btn){btn.innerText="🚀 GITHUB ah LIVE UPLOAD";btn.disabled=false;}}
-const _origUpdateBar=window.updateBar;window.updateBar=function(){try{_origUpdateBar();}catch(e){}try{const bar=document.getElementById('githubSyncBar');if(bar){if(isAdmin){bar.style.display='block';bar.classList.add('show');}else bar.style.display='none';}checkGitHubToken();}catch(e){}};
-if(typeof saveAll==='function'){const _origSave=saveAll;window.saveAll=function(){_origSave();const token=localStorage.getItem('kawn_github_token');if(token&&isAdmin){const b=document.getElementById('githubUploadBtn');if(b)b.style.display='inline-block';}};}
+ken=localStorage.getItem('kawn_github_token');if(token&&isAdmin){const b=document.getElementById('githubUploadBtn');if(b)b.style.display='inline-block';}};}
 setTimeout(checkGitHubToken,1000);
 </script></body>
 </html>
